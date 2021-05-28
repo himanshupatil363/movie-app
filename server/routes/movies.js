@@ -2,24 +2,21 @@ const express = require('express')
 const router = express.Router();
 const Movies = require('../models/movies');
 const multer = require('multer')
-const imageStorage = multer.diskStorage({
+const path = require('path')
+
+const storage = multer.diskStorage({
     destination: (req,file,callback) =>{
-        callback(null,"../client/public/uploads/images")
+        callback(null,"./client/public/uploads")
     },
     filename:(req,file,callback)=>{
-    callback(null,file.originalname);
+    callback(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname));
     }
 })
-// const videoStorage = multer.diskStorage({
-//     destination: (req,file,callback) =>{
-//         callback(null,"../client/public/uploads/videos")
-//     },
-//     filename:(req,file,callback)=>{
-//     callback(null,file.originalname);
-//     }
-// })
-const uploadImage = multer({storage:imageStorage});
-// const uploadVideo = multer({storage:videoStorage});
+
+const upload = multer({storage:storage});
+var Uploads = upload.fields([{ name: 'movieImage',maxCount:1}, { name: 'movieVideo',maxCount:1}])
+
+
 //Get all movies
 router.get('/',(req,res)=>{
     Movies.find()
@@ -29,15 +26,14 @@ router.get('/',(req,res)=>{
 module.exports = router;
 
 //Add new movie
-router.post('/add',uploadImage.single("movieImage"),(req,res)=>{
+router.post('/add',Uploads,(req,res)=>{
     const newMovie = new Movies({
         name:req.body.name,
         language:req.body.language,
         date:req.body.date,
-        image:req.file.originalname
-        // movieVideo:req.file.originalname
+        image:req.files.movieImage[0].filename,
+        video:req.files.movieVideo[0].filename
     })
-    console.log(file.path)
     newMovie.save()
     .then(()=>res.json('new movie added'))
     .catch(error => res.status(400).res.json(`Error: ${error}`))
@@ -50,20 +46,20 @@ router.get('/:id',(req,res)=>{
     .catch(error=>res.status(400).res.json(`Error: ${error}`))
 })
 
-router.put('/update/:id',uploadImage.single("movieImage"),(req,res)=>{
-    Movies.findById(req.params.id)
-    .then(movie=>{
-        movie.name= req.body.name;
-        movie.language = req.body.language;
-        movie.date = req.body.date;
-        movie.image=req.file.originalname;
-        // movie.movieVideo=req.file.originalname
-        movie
-        .save()
-        .then(()=>res.json("movie is updated"))
-        .catch((error)=>res.status(400).res.json(`Error: ${error}`))
-    })
-})
+// router.put('/update/:id',uploadVideo.single("movieVideo"),(req,res)=>{
+//     Movies.findById(req.params.id)
+//     .then(movie=>{
+//         movie.name= req.body.name;
+//         movie.language = req.body.language;
+//         movie.date = req.body.date;
+//         // movie.image=req.file.originalname;
+//         movie.video=req.file.originalname
+//         movie
+//         .save()
+//         .then(()=>res.json("movie is updated"))
+//         .catch((error)=>res.status(400).res.json(`Error: ${error}`))
+//     })
+// })
 
 router.delete('/:id',(req,res)=>{
     Movies.findByIdAndDelete(req.params.id)

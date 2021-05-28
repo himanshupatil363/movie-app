@@ -17,10 +17,10 @@ const movieSchema = new Schema({
         type:String,
         require:true
     },
-    // video:{
-    //     type:String,
-    //     require:true
-    // }
+    video:{
+        type:String,
+        require:true
+    }
 
 })
 
