@@ -12,7 +12,15 @@ const movieSchema = new Schema({
     date:{
         type:Date,
         required:true
-    }
+    },
+    image:{
+        type:String,
+        require:true
+    },
+    // video:{
+    //     type:String,
+    //     require:true
+    // }
 
 })
 

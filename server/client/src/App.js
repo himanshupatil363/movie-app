@@ -11,7 +11,7 @@ const App = () =>{
           <Route path="/addmovie">
             <AddMovie />
           </Route>
-          <Route path="/video/:id" children={Video}/>
+          <Route path="/:id" children={<Video/>}/>
         </Switch>
   );
 }
