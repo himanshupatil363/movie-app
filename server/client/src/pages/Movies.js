@@ -14,7 +14,7 @@ const Movies = () => {
     axios
       .get("http://localhost:8000/movies")
       .then((res) => setMovies(res.data))
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error.error));
   }
   function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage);
@@ -28,20 +28,24 @@ const Movies = () => {
   const pageCount = Math.ceil(movies.length / PER_PAGE);
 
   return (
-    <div className="flex flex-col h-full justify-between">
-      <div className="absolute flex items-center justify-center w-full">
-      <p className="text-xl">page count: </p>
-      <select className="text-purple-800 p-2 mx-2 outline-none" onChange={e => setPER_PAGE(parseInt(e.target.value))}>
-        <option value="10">10</option>
-        <option value="25">25</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-      </select>
+    <div className="flex flex-col items-between justify-between min-h-screen">
+      <div className="absolute flex justify-center w-full
+      ">
+        <p className="text-xl">page count: </p>
+        <select
+          className="text-purple-800 p-2 mx-2 outline-none"
+          onChange={(e) => setPER_PAGE(parseInt(e.target.value))}
+        >
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
       </div>
-      <div className="h-full flex flex-wrap justify-around items-center">
+      <div className="flex flex-wrap justify-around items-center">
         {currentPageData}
       </div>
-      <div>
+      <div className="">
         <ReactPaginate
           previousLabel={"← Previous"}
           nextLabel={"Next →"}

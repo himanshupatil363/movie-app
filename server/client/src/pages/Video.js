@@ -18,10 +18,10 @@ const Video = () => {
         src={`http://localhost:8000/${movie.video}`}
         controls="controls autoplay"
       ></video>
-      <div className="flex items-center justify-between mx-10">
+      <div className="flex items-center justify-between mx-2 md:mx-10">
         <div className="flex items-center">
         <img
-          className="h-20 w-20 object-cover mr-10 my-2 rounded-full"
+          className="h-20 w-20 object-cover mr-2 md:mr-10 my-2 rounded-full"
           src={`http://localhost:8000/${movie.image}`}
           alt="no"
         />

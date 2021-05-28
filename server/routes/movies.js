@@ -13,7 +13,28 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({storage:storage});
+const upload = multer({storage:storage,
+    fileFilter: (req, file, cb) => {
+        if(file.fieldname==="movieImage"){
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+          cb(null, true);
+        } else {
+          cb(null, false);
+          
+        }
+    }
+    else if(
+        file.fieldname==="movieVideo"
+    ){
+        if (file.mimetype == "video/mp4" || file.mimetype == "video/webm" || file.mimetype == " video/ogg") {
+            cb(null,true);
+          } else {
+            cb(null, false);
+            
+          }
+    }
+      }
+});
 var Uploads = upload.fields([{ name: 'movieImage',maxCount:1}, { name: 'movieVideo',maxCount:1}])
 
 
@@ -27,6 +48,13 @@ module.exports = router;
 
 //Add new movie
 router.post('/add',Uploads,(req,res)=>{
+    if(!req.files.movieImage){
+        res.json({ error: 'Invalid image extension' })
+    }
+    else if(!req.files.movieVideo){
+        res.json({ error: 'Invalid video extension' })
+    }
+    else{
     const newMovie = new Movies({
         name:req.body.name,
         language:req.body.language,
@@ -37,6 +65,7 @@ router.post('/add',Uploads,(req,res)=>{
     newMovie.save()
     .then(()=>res.json('new movie added'))
     .catch(error => res.status(400).res.json(`Error: ${error}`))
+}
 })
 
 //Find Movie by ID

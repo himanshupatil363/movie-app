@@ -8,7 +8,7 @@ const Base = ({
   children
 }) => {
   return (
-    <div className="flex flex-col justify-between bg-purple-200 h-full">
+    <div className="flex flex-col justify-between bg-purple-200 min-h-screen">
        
         <ul className="flex flex-col md:flex-row justify-between items-center bg-gray-800 px-10 py-4 text-white">
             <li className="text-4xl font-mono tracking-wider text-purple-400 font-bold">Doggie</li>
